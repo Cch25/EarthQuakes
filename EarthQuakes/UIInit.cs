@@ -2,20 +2,22 @@
 
 internal class UIInit
 {
-    private readonly Form1 _form;  
+    private readonly Form1 _form;
+    private readonly MapConfig _mapConfig;
 
     public UIInit(Form1 form)
     {
-        _form = form;  
+        _form = form;
+        _mapConfig = new MapConfig();
     }
 
     public EarthquakeDetector InitializeFormComponents()
     {
         _form.DisableCloseButton();
-        _form.pictureBox1.LoadAsync(new MapConfig().MapUrl);
+        _form.pictureBox1.LoadAsync(_mapConfig.MapUrl());
         _form.ddlPeriod.SelectedIndex = 3;
         new UIContextMenu().BuildTrayContextMenu(_form);
-        return new EarthquakeDetector(_form);
+        return new EarthquakeDetector(_form, _mapConfig);
     }
 
     internal class UIContextMenu

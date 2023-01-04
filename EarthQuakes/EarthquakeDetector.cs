@@ -1,26 +1,26 @@
-﻿
-namespace EarthQuakes;
+﻿namespace EarthQuakes;
 
 internal class EarthquakeDetector
 {
     private readonly Form1 _form;
-    public EarthquakeDetector(Form1 form)
+    private readonly MapConfig _mapConfig;
+
+    public EarthquakeDetector(Form1 form, MapConfig mapConfig)
     {
         _form = form;
+        _mapConfig = mapConfig;
     }
 
-    public async Task DetectEarthquakes(
-        float clat, 
-        float clon, 
-        float zoom, 
-        string period = "Important")
-        => await DisplayEarthquakes(clat, clon, zoom, period);
-
+    public async Task DetectEarthquakes(string period = "Important")
+        => await DisplayEarthquakes(
+            _mapConfig.CLat,
+            _mapConfig.CLon,
+            _mapConfig.Zoom, period);
 
     private async Task DisplayEarthquakes(
-        float clat, 
-        float clon, 
-        float zoom, 
+        float clat,
+        float clon,
+        float zoom,
         string period)
     {
         var earthquakes = (await new EarthquakesData(_form)
@@ -30,26 +30,23 @@ internal class EarthquakeDetector
 
         foreach (var quake in earthquakes)
         {
-            using (var g = _form.pictureBox1.CreateGraphics())
+            using var g = _form.pictureBox1.CreateGraphics();
+            try
             {
-                try
-                {
-                    g.TranslateTransform(
-                        _form.pictureBox1.ClientSize.Width / 2 - (quake.Distance / 2),
-                        _form.pictureBox1.ClientSize.Height / 2 - (quake.Distance / 2));
-                    g.FillEllipse(
-                        quake.EarthquakeDataModel.Magnitude < 5 ? Brushes.Magenta : Brushes.Red,
-                        quake.XCoord,
-                        quake.YCoord,
-                        quake.Distance,
-                        quake.Distance);
-                    g.Dispose();
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
-
+                g.TranslateTransform(
+                    _form.pictureBox1.ClientSize.Width / 2 - (quake.Distance / 2),
+                    _form.pictureBox1.ClientSize.Height / 2 - (quake.Distance / 2));
+                g.FillEllipse(
+                    quake.EarthquakeDataModel.Magnitude < 5 ? Brushes.Magenta : Brushes.Red,
+                    quake.XCoord,
+                    quake.YCoord,
+                    quake.Distance,
+                    quake.Distance);
+                g.Dispose();
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
 
@@ -77,7 +74,7 @@ internal class EarthquakeDetector
                         if (current > biggest)
                             biggest = current;
                         _form.lblDetails.Location = new Point(620, 420);
-                        _form.lblDetails.Text = $@"Place: {quake.EarthquakeDataModel.Place} " +
+                        _form.lblDetails.Text = $"Place: {quake.EarthquakeDataModel.Place} " +
                             $"\nDate: { Convert.ToDateTime(quake.EarthquakeDataModel.Updated).ToShortDateString()}" +
                             $" Time: {Convert.ToDateTime(quake.EarthquakeDataModel.Updated).ToShortTimeString()}" +
                             $"\nMagnitude: {biggest} Richter scale";
