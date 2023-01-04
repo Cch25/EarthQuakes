@@ -9,19 +9,23 @@ internal record EarthQuakeLocatorModel(
 
 internal static class EarthquakeLocator
 {
-    public static IEnumerable<EarthQuakeLocatorModel> CalculateLocation(
+
+    public static EarthQuakeGraphics CalculateLocation(
         this IEnumerable<EarthquakeDataModel> data,
-        float cLon,
-        float cLat,
-        float zoom)
+        Form1 form,
+        MapConfig mapConfig) => new(form, LocatePointsOnMap(data, mapConfig));
+
+    private static IEnumerable<EarthQuakeLocatorModel> LocatePointsOnMap(
+        IEnumerable<EarthquakeDataModel> data,
+        MapConfig mapConfig)
     {
-        float cx = MercX(cLon, zoom);
-        float cy = MercY(cLat, zoom);
+        float cx = MercX(mapConfig.CLon, mapConfig.Zoom);
+        float cy = MercY(mapConfig.CLat, mapConfig.Zoom);
 
         foreach (var quake in data)
         {
-            float x = MercX(quake.Longitude, zoom) - cx;
-            float y = MercY(quake.Latitude, zoom) - cy;
+            float x = MercX(quake.Longitude, mapConfig.Zoom) - cx;
+            float y = MercY(quake.Latitude, mapConfig.Zoom) - cy;
             float mag = (float)Math.Pow(10, quake.Magnitude);
             mag = (float)Math.Sqrt(mag);
             float magmax = (float)Math.Sqrt(Math.Pow(10, 10));

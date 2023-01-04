@@ -12,8 +12,7 @@ internal record EarthquakeDataModel(
     string Id);
 
 internal class EarthquakesData
-{
-    private readonly Form1 _form;
+{ 
     private readonly Dictionary<string, string> dataPaths = new()
     {
         ["Important"] = "significant_month.csv",
@@ -22,11 +21,6 @@ internal class EarthquakesData
         ["Last month"] = "all_month.csv",
 
     };
-    public EarthquakesData(Form1 form)
-    {
-        _form = form;
-
-    }
 
     public async Task<IEnumerable<EarthquakeDataModel>> DownloadAndExtractData(string period)
         => await new EarthquakeExtractor()
