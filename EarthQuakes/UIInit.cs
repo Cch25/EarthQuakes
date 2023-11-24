@@ -1,28 +1,18 @@
 ﻿namespace EarthQuakes;
 
-internal class UIInit
+internal static class UIInit
 {
-    private readonly Form1 _form;
-    private readonly MapConfig _mapConfig;
-
-    public UIInit(Form1 form)
+    public static void InitializeMap(Form1 form, MapSettings settings)
     {
-        _form = form;
-        _mapConfig = new MapConfig();
+        form.DisableCloseButton();
+        form.pictureBox1.LoadAsync(settings.MapUrl());
+        form.ddlPeriod.SelectedIndex = 3;
+        UIContextMenu.BuildTrayContextMenu(form);
     }
 
-    public EarthquakeDetector InitializeFormComponents()
+    internal static class UIContextMenu
     {
-        _form.DisableCloseButton();
-        _form.pictureBox1.LoadAsync(_mapConfig.MapUrl());
-        _form.ddlPeriod.SelectedIndex = 3;
-        new UIContextMenu().BuildTrayContextMenu(_form);
-        return new EarthquakeDetector(_form, _mapConfig);
-    }
-
-    internal class UIContextMenu
-    {
-        public void BuildTrayContextMenu(Form1 form)
+        public static void BuildTrayContextMenu(Form1 form)
         {
             //notification icon
             var cm = new ContextMenuStrip();

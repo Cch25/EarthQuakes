@@ -1,18 +1,18 @@
 ﻿namespace EarthQuakes;
 
-internal class EarthquakeDetector
+internal class EarthquakeManager
 {
     private readonly Form1 _form;
-    private readonly MapConfig _mapConfig;
+    private readonly MapSettings _mapConfig;
 
-    public EarthquakeDetector(Form1 form, MapConfig mapConfig)
+    public EarthquakeManager(Form1 form, MapSettings mapConfig)
     {
         _form = form;
         _mapConfig = mapConfig;
     }
 
-    public async Task DetectEarthquakes(string period = "Important")
-        => (await new EarthquakesData()
+    public async Task DisplayEarthquakes(string period = "Important")
+        => (await new EarthquakesDataParser()
             .DownloadAndExtractData(period))
             .CalculateLocation(_mapConfig)
             .Draw(_form, period);

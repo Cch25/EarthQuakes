@@ -7,15 +7,15 @@ internal record EarthQuakeLocatorModel(
     float Distance,
     EarthquakeDataModel EarthquakeDataModel);
 
-internal static class EarthquakeLocator
+internal static class EarthquakeMapLocator
 {
     public static IEnumerable<EarthQuakeLocatorModel> CalculateLocation(
         this IEnumerable<EarthquakeDataModel> data,
-        MapConfig mapConfig) => LocatePointsOnMap(data, mapConfig);
+        MapSettings mapConfig) => LocatePointsOnMap(data, mapConfig);
 
     private static IEnumerable<EarthQuakeLocatorModel> LocatePointsOnMap(
         IEnumerable<EarthquakeDataModel> data,
-        MapConfig mapConfig)
+        MapSettings mapConfig)
     {
         float cx = MercX(mapConfig.CLon, mapConfig.Zoom);
         float cy = MercY(mapConfig.CLat, mapConfig.Zoom);

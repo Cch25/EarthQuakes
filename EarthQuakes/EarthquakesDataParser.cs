@@ -11,7 +11,7 @@ internal record EarthquakeDataModel(
     string Type,
     string Id);
 
-internal class EarthquakesData
+internal class EarthquakesDataParser
 { 
     private readonly Dictionary<string, string> dataPaths = new()
     {

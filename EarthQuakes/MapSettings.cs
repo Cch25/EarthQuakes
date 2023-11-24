@@ -1,5 +1,5 @@
 ﻿namespace EarthQuakes;
-internal class MapConfig
+internal class MapSettings
 {
     private const int _width = 1024;
     private const int _height = 512;
