@@ -14,7 +14,14 @@ internal class EarthquakeDetector
     public async Task DetectEarthquakes(string period = "Important")
         => (await new EarthquakesData()
             .DownloadAndExtractData(period))
-            .CalculateLocation(_form, _mapConfig)
-            .DrawEarthquakesOnMap(period);
+            .CalculateLocation(_mapConfig)
+            .Draw(_form, period);
+}
+
+internal static class EarthquakeLocatorExtensions
+{
+    public static void Draw(
+        this IEnumerable<EarthQuakeLocatorModel> @this, Form1 form, string period) =>
+        new EarthQuakeGraphics(form, @this).DrawEarthquakesOnMap(period);
 }
 

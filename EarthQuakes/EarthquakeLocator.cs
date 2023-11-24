@@ -9,11 +9,9 @@ internal record EarthQuakeLocatorModel(
 
 internal static class EarthquakeLocator
 {
-
-    public static EarthQuakeGraphics CalculateLocation(
+    public static IEnumerable<EarthQuakeLocatorModel> CalculateLocation(
         this IEnumerable<EarthquakeDataModel> data,
-        Form1 form,
-        MapConfig mapConfig) => new(form, LocatePointsOnMap(data, mapConfig));
+        MapConfig mapConfig) => LocatePointsOnMap(data, mapConfig);
 
     private static IEnumerable<EarthQuakeLocatorModel> LocatePointsOnMap(
         IEnumerable<EarthquakeDataModel> data,
@@ -49,23 +47,26 @@ internal static class EarthquakeLocator
     public static int CalculateDistance(
       this EarthQuakeLocatorModel quake,
       MouseEventArgs eventArgs,
-      PictureBox pbox)
-     => (int)Distance(
-                      eventArgs.X,
+      PictureBox pbox) =>
+        (int)Distance(eventArgs.X,
                       eventArgs.Y - (pbox.ClientSize.Height / 2),
                       (int)quake.EarthquakeDataModel.Latitude + (pbox.ClientSize.Width / 2),
                       (int)quake.EarthquakeDataModel.Longitude);
 
-    private static double Distance(int x1, int y1, int x2, int y2)
-        => Math.Sqrt(Math.Pow((double)x1 - x2, 2) + Math.Pow((double)y1 - y2, 2));
+    private static double Distance(
+        int x1,
+        int y1,
+        int x2,
+        int y2) =>
+        Math.Sqrt(Math.Pow((double)x1 - x2, 2) + Math.Pow((double)y1 - y2, 2));
 
     private static float Map(
         float value,
         float from1,
         float to1,
         float from2,
-        float to2)
-        => from2 + (value - from1) * (to2 - from2) / (to1 - from1);
+        float to2) => 
+        from2 + (value - from1) * (to2 - from2) / (to1 - from1);
 
     private static float MercX(float lon, float zoom)
     {

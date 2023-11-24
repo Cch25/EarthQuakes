@@ -22,8 +22,9 @@ internal class EarthquakesData
 
     };
 
-    public async Task<IEnumerable<EarthquakeDataModel>> DownloadAndExtractData(string period)
-        => await new EarthquakeExtractor()
+    public async Task<IEnumerable<EarthquakeDataModel>> 
+        DownloadAndExtractData(string period) => 
+        await new EarthquakeExtractor()
             .Extract($"https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/{dataPaths[period]}");
     
 
